@@ -4,6 +4,7 @@ using Appointments.Api.Repositories.Interfaces;
 using Appointments.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Appointments.Api.Controllers
 {
@@ -18,6 +19,26 @@ namespace Appointments.Api.Controllers
         {
             _appointmentService = appointmentService;
             _userService = userRepository;
+        }
+
+        [HttpGet("appointments")]
+        public async Task<IActionResult> GetAllAppointments(
+            [FromQuery] string sortBy = "date",
+            [FromQuery] bool ascending = true)
+        {
+            try
+            {
+                var appointments = await _appointmentService.GetAllAppointmentsAsync(sortBy, ascending);
+                return Ok(appointments);
+            }
+            catch (AppointmentNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut("appointment/approve")]
@@ -84,6 +105,24 @@ namespace Appointments.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

@@ -24,5 +24,10 @@ namespace Appointments.Api.Services.Implementation
 
             await _userRepository.AddUserAsync(user);
         }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersAsync();
+        }
     }
 }

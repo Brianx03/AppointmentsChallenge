@@ -1,7 +1,6 @@
 ﻿using Appointments.Api.Models;
 using Appointments.Api.Repositories.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Appointments.Api.Repositories.Implementation
 {
@@ -18,6 +17,11 @@ namespace Appointments.Api.Repositories.Implementation
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _context.Users.ToListAsync();
         }
     }
 }
