@@ -30,6 +30,7 @@ namespace Appointments.Test
         {
             //arrange
             var userId = 1;
+            _context.Appointments.RemoveRange(_context.Appointments);
             var appointments = new List<Appointment>
             {
                 new Appointment { UserId = userId, Date = new DateTime(2025, 1, 1), Status = AppointmentStatus.Pending, Description = "Test 1" },
@@ -52,7 +53,6 @@ namespace Appointments.Test
             // Arrange
             var userId = 1;
             _context.Appointments.RemoveRange(_context.Appointments);
-
             var appointments = new List<Appointment>
             {
                 new Appointment { UserId = userId, Date = new DateTime(2025, 1, 1), Status = AppointmentStatus.Pending, Description = "Test 1" },
@@ -92,6 +92,7 @@ namespace Appointments.Test
         public async Task GetUserByIdAsync_ShouldReturnUser()
         {
             // Arrange
+            _context.Appointments.RemoveRange(_context.Appointments);
             var user = new User { UserId = 1, Name = "Brian" };
 
             await _context.Users.AddAsync(user);
@@ -125,6 +126,7 @@ namespace Appointments.Test
         public async Task UpdateAppointmentAsync_ShouldUpdateAppointment()
         {
             // Arrange
+            _context.Appointments.RemoveRange(_context.Appointments);
             var appointment = new Appointment { AppointmentId = 1, Date = new DateTime(2025, 1, 1), Status = AppointmentStatus.Pending, Description = "test updateAppointmentAsync" };
 
             await _context.Appointments.AddAsync(appointment);
