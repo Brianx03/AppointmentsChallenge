@@ -42,8 +42,7 @@ namespace Appointments.Api.Repositories.Implementation
                 _ => query.OrderBy(a => a.Date),
             };
 
-            var appointments = await query.ToListAsync();
-            return appointments;
+            return await query.ToListAsync();
         }
 
         public async Task<Appointment?> GetAppointmentByIdAsync(int appointmentId)

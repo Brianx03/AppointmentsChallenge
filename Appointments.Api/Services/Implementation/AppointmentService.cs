@@ -101,28 +101,6 @@ namespace Appointments.Api.Services.Implementation
             await _appointmentRepository.DeleteAppointmentAsync(existingAppointment);
         }
 
-        public async Task<bool> ApproveAppointmentAsync(int userId, int appointmentId)
-        {
-            var appointment = await _appointmentRepository.GetAppointmentByIdAsync(appointmentId);
-            if (appointment == null || appointment.Status == AppointmentStatus.Canceled)
-                return false;
-
-            appointment.Status = AppointmentStatus.Approved;
-            await _appointmentRepository.UpdateAppointmentAsync(appointment);
-            return true;
-        }
-
-        public async Task<bool> CancelAppointmentAsync(int userId, int appointmentId)
-        {
-            var appointment = await _appointmentRepository.GetAppointmentByIdAsync(appointmentId);
-            if (appointment == null)
-                return false;
-
-            appointment.Status = AppointmentStatus.Canceled;
-            await _appointmentRepository.UpdateAppointmentAsync(appointment);
-            return true;
-        }
-
         public async Task ApproveAppointmentAsync(int appointmentId)
         {
             var existingAppointment = await _appointmentRepository.GetAppointmentByIdAsync(appointmentId);
