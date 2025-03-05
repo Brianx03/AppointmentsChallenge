@@ -29,7 +29,7 @@ namespace Appointments.Test
         public async Task GetAllAppointments_ReturnsOkResult_WithListOfAppointments()
         {
             // Arrange
-            var appointments = new List<Appointment> { new Appointment { AppointmentId = 1, Description = "Test" } };
+            var appointments = new List<AppointmentDto> { new AppointmentDto { AppointmentId = 1, Description = "Test" } };
             _mockAppointmentService.Setup(service => service.GetAllAppointmentsAsync(It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(appointments);
 
@@ -38,7 +38,7 @@ namespace Appointments.Test
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<List<Appointment>>(okResult.Value);
+            var returnValue = Assert.IsType<List<AppointmentDto>>(okResult.Value);
             Assert.Single(returnValue);
         }
 

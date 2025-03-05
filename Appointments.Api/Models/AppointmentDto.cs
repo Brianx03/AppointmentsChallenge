@@ -1,5 +1,4 @@
 ﻿using Appointments.Api.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace Appointments.Api.Models
@@ -16,5 +15,7 @@ namespace Appointments.Api.Models
 
         [Required]
         public DateTime Date { get; set; }
+        public AppointmentStatus Status { get; set; }
+        public string UserName { get; set; }
     }
 }

@@ -13,9 +13,19 @@ namespace Appointments.Api.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<List<Appointment>> GetAllAppointmentsAsync(string sortBy, bool ascending)
+        public async Task<List<AppointmentDto>> GetAllAppointmentsAsync(string sortBy, bool ascending)
         {
-            var query = _context.Appointments.AsQueryable();
+            var query = _context.Appointments
+                .Include(a => a.User)
+                .Select(a => new AppointmentDto
+                {
+                    AppointmentId = a.AppointmentId,
+                    Description = a.Description,
+                    Date = a.Date,
+                    Status = a.Status,
+                    UserName = a.User.Name
+                })
+                .AsQueryable();
 
             query = sortBy.ToLower() switch
             {
@@ -25,9 +35,9 @@ namespace Appointments.Api.Repositories.Implementation
                 _ => query.OrderBy(a => a.Date),
             };
 
-            var appointments = await query.ToListAsync();
-            return appointments;
+            return await query.AsNoTracking().ToListAsync();
         }
+
 
         public async Task<List<Appointment>> GetUserAppointmentsAsync(int userId, string sortBy, bool ascending)
         {

@@ -29,7 +29,7 @@ namespace Appointments.Api.Services.Implementation
             return appointments;
         }
 
-        public async Task<List<Appointment>> GetAllAppointmentsAsync(string sortBy = "date", bool ascending = false)
+        public async Task<List<AppointmentDto>> GetAllAppointmentsAsync(string sortBy = "date", bool ascending = false)
         {
             var appointments = await _appointmentRepository.GetAllAppointmentsAsync(sortBy, ascending);
 

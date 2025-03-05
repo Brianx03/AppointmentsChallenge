@@ -12,6 +12,7 @@ namespace Appointments.Test
 
     public class AppointmentRepositoryTests
     {
+        private readonly DbContextOptions<AppDbContext> _dbContextOptions;
         private readonly AppDbContext _context;
         private readonly AppointmentRepository _repository;
 
@@ -28,15 +29,17 @@ namespace Appointments.Test
         [Fact]
         public async Task GetAllAppointmentsAsync_ShouldReturnSortedAppointments()
         {
-            //arrange
+            // Arrange
             var userId = 1;
             _context.Appointments.RemoveRange(_context.Appointments);
+            var user = new User { UserId = userId, Name = "Test User" };
             var appointments = new List<Appointment>
             {
-                new Appointment { UserId = userId, Date = new DateTime(2025, 1, 1), Status = AppointmentStatus.Pending, Description = "Test 1" },
-                new Appointment { UserId = userId, Date = new DateTime(2025, 1, 2), Status = AppointmentStatus.Canceled, Description = "Test 2" }
+                new Appointment { User = user, Date = new DateTime(2025, 1, 1), Status = AppointmentStatus.Pending, Description = "Test 1" },
+                new Appointment { User = user, Date = new DateTime(2025, 1, 2), Status = AppointmentStatus.Canceled, Description = "Test 2" }
             };
 
+            await _context.Users.AddAsync(user);
             await _context.Appointments.AddRangeAsync(appointments);
             await _context.SaveChangesAsync();
 
@@ -44,7 +47,10 @@ namespace Appointments.Test
             var result = await _repository.GetAllAppointmentsAsync("date", true);
 
             // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
             Assert.Equal(new DateTime(2025, 1, 1), result[0].Date);
+            Assert.Equal(new DateTime(2025, 1, 2), result[1].Date);
         }
 
         [Fact]

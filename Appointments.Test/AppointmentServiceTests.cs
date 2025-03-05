@@ -52,7 +52,7 @@ namespace Appointments.Test
         public async Task GetAllAppointmentsAsync_NoAppointments_ThrowsAppointmentNotFoundException()
         {
             _appointmentRepositoryMock.Setup(a => a.GetAllAppointmentsAsync(It.IsAny<string>(), It.IsAny<bool>()))
-                .ReturnsAsync((List<Appointment>)null);
+                .ReturnsAsync((List<AppointmentDto>)null);
 
             await Assert.ThrowsAsync<AppointmentNotFoundException>(() => _appointmentService.GetAllAppointmentsAsync());
         }
@@ -60,7 +60,7 @@ namespace Appointments.Test
         [Fact]
         public async Task GetAllAppointmentsAsync_ReturnsAppointments()
         {
-            var appointments = new List<Appointment> { new Appointment() };
+            var appointments = new List<AppointmentDto> { new AppointmentDto() };
             _appointmentRepositoryMock.Setup(a => a.GetAllAppointmentsAsync(It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(appointments);
 
