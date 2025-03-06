@@ -3,9 +3,11 @@ using Appointments.Api.CustomExceptions;
 using Appointments.Api.Enums;
 using Appointments.Api.Models;
 using Appointments.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Xunit;
 
 namespace Appointments.Test
@@ -47,19 +49,7 @@ namespace Appointments.Test
         }
 
         [Fact]
-        public async Task GetUserAppointments_ReturnsNotFound_WhenAppointmentNotFoundExceptionThrown()
-        {
-            _appointmentServiceMock.Setup(s => s.GetUserAppointmentsAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool>()))
-                .ThrowsAsync(new AppointmentNotFoundException());
-
-            var result = await _userController.GetUserAppointments(1);
-
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("Appointment not found.", notFoundResult.Value);
-        }
-
-        [Fact]
-        public async Task CreateAppointment_ReturnsCreatedAtActionResult()
+        public async Task CreateAppointment_ReturnsNoContent_WhenSuccessful()
         {
             var appointmentDto = new AppointmentDto
             {
@@ -70,8 +60,8 @@ namespace Appointments.Test
 
             var result = await _userController.CreateAppointment(appointmentDto);
 
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal(nameof(UserController.GetUserAppointments), createdAtActionResult.ActionName);
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+            Assert.Equal(204, noContentResult.StatusCode);
         }
 
         [Fact]

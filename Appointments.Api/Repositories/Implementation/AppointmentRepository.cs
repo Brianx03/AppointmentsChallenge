@@ -16,19 +16,21 @@ namespace Appointments.Api.Repositories.Implementation
         public async Task<List<AppointmentDto>> GetAllAppointmentsAsync(string sortBy, bool ascending)
         {
             var query = _context.Appointments
-                .Include(a => a.User)
+                .Include(u => u.User)
                 .Select(a => new AppointmentDto
                 {
                     AppointmentId = a.AppointmentId,
                     Description = a.Description,
                     Date = a.Date,
                     Status = a.Status,
+                    UserId =  a.User.UserId,
                     UserName = a.User.Name
                 })
                 .AsQueryable();
 
             query = sortBy.ToLower() switch
             {
+                "name" => ascending ? query.OrderBy(a => a.UserName) : query.OrderByDescending(a => a.UserName),
                 "date" => ascending ? query.OrderBy(a => a.Date) : query.OrderByDescending(a => a.Date),
                 "status" => ascending ? query.OrderBy(a => a.Status) : query.OrderByDescending(a => a.Status),
                 "description" => ascending ? query.OrderBy(a => a.Description) : query.OrderByDescending(a => a.Description),

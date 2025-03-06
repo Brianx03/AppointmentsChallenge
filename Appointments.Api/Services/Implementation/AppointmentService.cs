@@ -21,22 +21,12 @@ namespace Appointments.Api.Services.Implementation
             if (userId <= 0)
                 throw new ValidationException("Invalid User ID.");
 
-            var appointments = await _appointmentRepository.GetUserAppointmentsAsync(userId, sortBy, ascending);
-
-            if (appointments == null || !appointments.Any())
-                throw new AppointmentNotFoundException();
-
-            return appointments;
+            return await _appointmentRepository.GetUserAppointmentsAsync(userId, sortBy, ascending);
         }
 
         public async Task<List<AppointmentDto>> GetAllAppointmentsAsync(string sortBy = "date", bool ascending = false)
         {
-            var appointments = await _appointmentRepository.GetAllAppointmentsAsync(sortBy, ascending);
-
-            if (appointments == null || !appointments.Any())
-                throw new AppointmentNotFoundException();
-
-            return appointments;
+            return await _appointmentRepository.GetAllAppointmentsAsync(sortBy, ascending);
         }
 
         public async Task<Appointment> GetAppointmentByIdAsync(int appointmentId)
@@ -61,7 +51,7 @@ namespace Appointments.Api.Services.Implementation
             if (userExists == null)
                 throw new UserNotFoundException(appointment.UserId);
 
-            if (appointment.Date < DateTime.UtcNow)
+            if (appointment.Date < DateTime.UtcNow.Date)
                 throw new ValidationException("Appointment date must be in the future.");
 
             await _appointmentRepository.AddAppointmentAsync(appointment);

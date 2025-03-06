@@ -16,6 +16,6 @@ namespace Appointments.Api.Models
         [Required]
         public DateTime Date { get; set; }
         public AppointmentStatus Status { get; set; }
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
     }
 }

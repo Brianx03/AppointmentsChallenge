@@ -33,10 +33,6 @@ namespace Appointments.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (AppointmentNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
@@ -58,7 +54,7 @@ namespace Appointments.Api.Controllers
 
                 await _appointmentService.AddAppointmentAsync(appointment);
 
-                return CreatedAtAction(nameof(GetUserAppointments), new { userId = appointment.UserId }, appointment);
+                return NoContent();
             }
             catch (ValidationException ex)
             {

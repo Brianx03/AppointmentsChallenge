@@ -98,7 +98,7 @@ namespace Appointments.Test
         public async Task GetUserByIdAsync_ShouldReturnUser()
         {
             // Arrange
-            _context.Appointments.RemoveRange(_context.Appointments);
+            _context.Users.RemoveRange(_context.Users);
             var user = new User { UserId = 1, Name = "Brian" };
 
             await _context.Users.AddAsync(user);

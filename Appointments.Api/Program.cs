@@ -21,7 +21,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>()
                 .AddScoped<IAppointmentService, AppointmentService>()
-                .AddScoped<IUserRepository, UserRepository>();
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IUserService, UserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

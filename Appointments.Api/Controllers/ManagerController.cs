@@ -1,10 +1,8 @@
 ﻿using Appointments.Api.CustomExceptions;
 using Appointments.Api.Models;
-using Appointments.Api.Repositories.Interfaces;
 using Appointments.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
 namespace Appointments.Api.Controllers
 {
@@ -13,12 +11,12 @@ namespace Appointments.Api.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
-        private readonly IUserRepository _userService;
+        private readonly IUserService _userService;
 
-        public ManagerController(IAppointmentService appointmentService, IUserRepository userRepository)
+        public ManagerController(IAppointmentService appointmentService, IUserService userService)
         {
             _appointmentService = appointmentService;
-            _userService = userRepository;
+            _userService = userService;
         }
 
         [HttpGet("appointments")]
@@ -30,10 +28,6 @@ namespace Appointments.Api.Controllers
             {
                 var appointments = await _appointmentService.GetAllAppointmentsAsync(sortBy, ascending);
                 return Ok(appointments);
-            }
-            catch (AppointmentNotFoundException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

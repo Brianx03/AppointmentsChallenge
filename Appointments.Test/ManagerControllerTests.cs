@@ -15,14 +15,14 @@ namespace Appointments.Test
     public class ManagerControllerTests
     {
         private readonly Mock<IAppointmentService> _mockAppointmentService;
-        private readonly Mock<IUserRepository> _mockUserRepository;
+        private readonly Mock<IUserService> _mockUserService;
         private readonly ManagerController _controller;
 
         public ManagerControllerTests()
         {
             _mockAppointmentService = new Mock<IAppointmentService>();
-            _mockUserRepository = new Mock<IUserRepository>();
-            _controller = new ManagerController(_mockAppointmentService.Object, _mockUserRepository.Object);
+            _mockUserService = new Mock<IUserService>();
+            _controller = new ManagerController(_mockAppointmentService.Object, _mockUserService.Object);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Appointments.Test
         {
             // Arrange
             var userDto = new UserDto { Name = "Brian" };
-            _mockUserRepository.Setup(repo => repo.AddUserAsync(It.IsAny<User>()))
+            _mockUserService.Setup(repo => repo.AddUserAsync(It.IsAny<User>()))
                 .Returns(Task.CompletedTask);
 
             // Act
@@ -90,7 +90,7 @@ namespace Appointments.Test
         {
             // Arrange
             var users = new List<User> { new User { UserId = 1, Name = "Test User" } };
-            _mockUserRepository.Setup(repo => repo.GetAllUsersAsync())
+            _mockUserService.Setup(repo => repo.GetAllUsersAsync())
                 .ReturnsAsync(users);
 
             // Act
