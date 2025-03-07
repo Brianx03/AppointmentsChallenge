@@ -41,7 +41,7 @@ namespace Appointments.Api.Repositories.Implementation
         }
 
 
-        public async Task<List<Appointment>> GetUserAppointmentsAsync(int userId, string sortBy, bool ascending)
+        public async Task<List<Appointment>> GetUserAppointmentsAsync(int userId, string sortBy = "date", bool ascending = false)
         {
             var query =_context.Appointments
                 .Where(appoinment => appoinment.UserId == userId);
@@ -54,7 +54,7 @@ namespace Appointments.Api.Repositories.Implementation
                 _ => query.OrderBy(a => a.Date),
             };
 
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<Appointment?> GetAppointmentByIdAsync(int appointmentId)

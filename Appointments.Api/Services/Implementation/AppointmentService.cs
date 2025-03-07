@@ -32,9 +32,6 @@ namespace Appointments.Api.Services.Implementation
         public async Task<Appointment> GetAppointmentByIdAsync(int appointmentId)
         {
             if (appointmentId <= 0)
-                throw new ValidationException("Invalid User ID.");
-
-            if (appointmentId <= 0)
                 throw new ValidationException("Invalid Appointment ID.");
 
             var appointment = await _appointmentRepository.GetAppointmentByIdAsync(appointmentId);
@@ -51,7 +48,7 @@ namespace Appointments.Api.Services.Implementation
             if (userExists == null)
                 throw new UserNotFoundException(appointment.UserId);
 
-            if (appointment.Date < DateTime.UtcNow.Date)
+            if (appointment.Date < DateTime.Now)
                 throw new ValidationException("Appointment date must be in the future.");
 
             await _appointmentRepository.AddAppointmentAsync(appointment);
@@ -69,7 +66,7 @@ namespace Appointments.Api.Services.Implementation
             if (existingAppointment.Status != AppointmentStatus.Pending)
                 throw new AppointmentStatusIsNotPending();
 
-            if (appointment.Date < DateTime.UtcNow)
+            if (appointment.Date < DateTime.Now)
                 throw new ValidationException("Appointment date must be in the future.");
 
             existingAppointment.Date = appointment.Date;
@@ -94,6 +91,9 @@ namespace Appointments.Api.Services.Implementation
         public async Task ApproveAppointmentAsync(int appointmentId)
         {
             var existingAppointment = await _appointmentRepository.GetAppointmentByIdAsync(appointmentId);
+
+            if (appointmentId <= 0)
+                throw new ValidationException("Invalid Appointment ID.");
 
             if (existingAppointment == null)
                 throw new AppointmentNotFoundException();

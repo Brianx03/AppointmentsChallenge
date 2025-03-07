@@ -29,9 +29,9 @@ namespace Appointments.Api.Controllers
                 var appointments = await _appointmentService.GetAllAppointmentsAsync(sortBy, ascending);
                 return Ok(appointments);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "An internal server error occurred.");
             }
         }
 
@@ -43,6 +43,10 @@ namespace Appointments.Api.Controllers
                 await _appointmentService.ApproveAppointmentAsync(appointmentId);
                 return NoContent();
             }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (AppointmentNotFoundException ex)
             {
                 return NotFound(ex.Message);
@@ -51,9 +55,9 @@ namespace Appointments.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                return StatusCode(500, "An internal server error occurred.");
             }
         }
 
@@ -73,9 +77,9 @@ namespace Appointments.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                return StatusCode(500, "An internal server error occurred.");
             }
         }
 
@@ -84,6 +88,9 @@ namespace Appointments.Api.Controllers
         {
             try
             {
+                if (user == null)
+                    throw new UserIsNullException();
+
                 var newUser = new User
                 {
                     Name = user.Name,
@@ -92,13 +99,17 @@ namespace Appointments.Api.Controllers
                 await _userService.AddUserAsync(newUser);
                 return NoContent();
             }
+            catch(UserIsNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (ValidationException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                return StatusCode(500, "An internal server error occurred.");
             }
         }
 
@@ -114,9 +125,9 @@ namespace Appointments.Api.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "An internal server error occurred.");
             }
         }
     }

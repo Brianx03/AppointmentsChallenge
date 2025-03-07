@@ -21,7 +21,7 @@ namespace Appointments.Api.Repositories.Implementation
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.AsNoTracking().ToListAsync();
         }
     }
 }
