@@ -30,7 +30,7 @@ namespace Appointments.Api.Repositories.Implementation
 
             query = sortBy.ToLower() switch
             {
-                "name" => ascending ? query.OrderBy(a => a.UserName) : query.OrderByDescending(a => a.UserName),
+                "username" => ascending ? query.OrderBy(a => a.UserName) : query.OrderByDescending(a => a.UserName),
                 "date" => ascending ? query.OrderBy(a => a.Date) : query.OrderByDescending(a => a.Date),
                 "status" => ascending ? query.OrderBy(a => a.Status) : query.OrderByDescending(a => a.Status),
                 "description" => ascending ? query.OrderBy(a => a.Description) : query.OrderByDescending(a => a.Description),
